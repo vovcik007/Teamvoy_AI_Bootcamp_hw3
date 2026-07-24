@@ -67,6 +67,25 @@ TOOL_DEFINITIONS = [
             },
             "required": ["type", "deal_id"]
         }
+    },
+    # ✅ НОВИЙ ІНСТРУМЕНТ для GraphQL
+    {
+        "name": "execute_graphql",
+        "description": "Execute a GraphQL query or mutation against the CRM. Use this for complex read operations with nested relations (e.g., get company with all its deals and activities in one query). For simple write operations, prefer REST tools (create_company, create_deal, etc.).",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "query": {
+                    "type": "STRING",
+                    "description": "GraphQL query or mutation string"
+                },
+                "variables": {
+                    "type": "OBJECT",
+                    "description": "Variables for the GraphQL query (optional)"
+                }
+            },
+            "required": ["query"]
+        }
     }
 ]
 
@@ -89,7 +108,6 @@ class ToolExecutor:
             else:
                 result = self._execute_api(name, args)
             
-            # ✅ ГАРАНТІЯ: Gemini вимагає, щоб response був dict, а не list або string
             if isinstance(result, list):
                 return {"items": result}
             elif isinstance(result, str):
@@ -100,6 +118,17 @@ class ToolExecutor:
             return {"error": str(e), "detail": "Tool execution failed"}
 
     def _execute_mock(self, name: str, args: Dict[str, Any]) -> Any:
+        # ✅ Mock для GraphQL — повертаємо всі дані
+        if name == "execute_graphql":
+            return {
+                "data": {
+                    "companies": self.mock_db["companies"],
+                    "contacts": self.mock_db["contacts"],
+                    "deals": self.mock_db["deals"],
+                    "activities": self.mock_db["activities"]
+                }
+            }
+        
         if name == "search_companies":
             return [c for c in self.mock_db["companies"] if args["query"].lower() in c["name"].lower()]
         
@@ -111,6 +140,18 @@ class ToolExecutor:
         return record
 
     def _execute_api(self, name: str, args: Dict[str, Any]) -> Any:
+        # ✅ НОВИЙ GraphQL endpoint
+        if name == "execute_graphql":
+            url = f"{self.api_url}/graphql"
+            payload = {
+                "query": args["query"],
+                "variables": args.get("variables", {})
+            }
+            r = httpx.post(url, json=payload, headers=self.headers, timeout=10.0)
+            r.raise_for_status()
+            return r.json()
+        
+        # REST endpoints
         endpoints = {
             "search_companies": ("GET", f"/companies?search={args.get('query', '')}"),
             "create_company": ("POST", "/companies"),
