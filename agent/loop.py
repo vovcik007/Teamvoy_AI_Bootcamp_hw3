@@ -17,6 +17,12 @@ class AgentLoop:
             "4. Chain dependencies correctly: you MUST have a company_id before creating a contact, and a company_id/contact_id before creating a deal.\n"
             "5. When the task is fully completed, provide a concise, structured summary of what was created (with IDs).\n\n"
             
+            "SUPPORTED OPERATIONS:\n"
+            "- CREATE: You can create companies, contacts, deals, and activities.\n"
+            "- READ: You can search and retrieve any entity using REST or GraphQL.\n"
+            "- UPDATE/DELETE: You can ONLY update and delete DEALS. Other entities (companies, contacts, activities) cannot be modified or deleted.\n"
+            "- If a user asks to update/delete a company, contact, or activity, politely explain that this operation is not currently supported and suggest alternatives (e.g., creating a new record instead).\n\n"
+            
             "API SELECTION STRATEGY:\n"
             "- Use REST tools (create_company, create_contact, create_deal, create_activity) for WRITE operations.\n"
             "- Use 'execute_graphql' for COMPLEX READ operations with nested relations. Examples:\n"

@@ -32,3 +32,9 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
+
+export const updateDealSchema = z.object({
+  title: z.string().min(1).optional(),
+  stage: z.enum(['LEAD', 'VIEWING', 'OFFER', 'NEGOTIATION', 'CLOSED_WON', 'CLOSED_LOST']).optional(),
+  amount: z.number().positive().optional(),
+});

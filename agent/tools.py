@@ -56,6 +56,31 @@ TOOL_DEFINITIONS = [
         }
     },
     {
+        "name": "update_deal",
+        "description": "Update an existing deal's information. Use this to change deal stage (e.g., move from LEAD to VIEWING), update amount, or modify title. Only provide fields you want to change (partial update).",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "id": {"type": "STRING", "description": "UUID of the deal to update"},
+                "title": {"type": "STRING", "description": "New property address or deal title (optional)"},
+                "stage": {"type": "STRING", "enum": ["LEAD", "VIEWING", "OFFER", "NEGOTIATION", "CLOSED_WON", "CLOSED_LOST"], "description": "New deal stage (optional)"},
+                "amount": {"type": "NUMBER", "description": "New property price (optional)"}
+            },
+            "required": ["id"]
+        }
+    },
+    {
+        "name": "delete_deal",
+        "description": "Permanently delete a deal and all its associated activities. WARNING: This action cannot be undone.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "id": {"type": "STRING", "description": "UUID of the deal to delete"}
+            },
+            "required": ["id"]
+        }
+    },
+    {
         "name": "create_activity",
         "description": "Log an interaction (call, showing, etc.) for a specific deal.",
         "parameters": {

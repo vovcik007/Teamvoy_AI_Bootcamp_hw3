@@ -5,7 +5,7 @@ import { requireAuth, signToken, verifyPassword, AuthRequest } from './auth.js';
 import { AppError } from './errors.js';
 import { 
   loginSchema, createCompanySchema, createContactSchema, 
-  createDealSchema, createActivitySchema 
+  createDealSchema, createActivitySchema, updateDealSchema 
 } from './validation.js';
 
 const router = Router();
@@ -107,6 +107,33 @@ router.post('/deals', requireAuth, async (req: AuthRequest, res: Response, next:
       }
     });
     res.status(201).json(deal);
+  } catch (err) { next(err); }
+});
+
+// Example: PATCH /deals/:id
+router.patch('/deals/:id', requireAuth, async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const data = updateDealSchema.parse(req.body); // New Zod schema for partial updates
+    
+    const deal = await prisma.deal.update({
+      where: { id },
+      data: {
+        stage: data.stage,
+        amount: data.amount,
+        title: data.title,
+      }
+    });
+    res.json(deal);
+  } catch (err) { next(err); }
+});
+
+// Example: DELETE /deals/:id
+router.delete('/deals/:id', requireAuth, async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    await prisma.deal.delete({ where: { id } });
+    res.status(204).send();
   } catch (err) { next(err); }
 });
 
