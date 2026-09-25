@@ -2,6 +2,13 @@
 
 This homework is a real estate CRM with a conversational AI agent. The CRM stores brokerages, contacts, property deals, and activities. A user can give the agent a natural-language brief; the agent chooses CRM tools and performs the requested workflow through the API.
 
+## Branches
+
+| Branch | Where to start |
+| --- | --- |
+| [`main`](https://github.com/vovcik007/Teamvoy_AI_Bootcamp_hw3/tree/main) | Browse the CRM API, database schema, agent, and setup guide below. |
+| [`feature/hw3-ai-native-crm`](https://github.com/vovcik007/Teamvoy_AI_Bootcamp_hw3/tree/feature/hw3-ai-native-crm) | Follow the original feature development and its [README](https://github.com/vovcik007/Teamvoy_AI_Bootcamp_hw3/blob/feature/hw3-ai-native-crm/README.md). |
+
 ## What I built
 
 - **CRM API:** TypeScript, Express, Prisma, and PostgreSQL. It exposes authenticated REST endpoints for CRM operations and a GraphQL endpoint for structured queries.
